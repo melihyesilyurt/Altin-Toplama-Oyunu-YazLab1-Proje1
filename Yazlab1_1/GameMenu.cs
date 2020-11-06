@@ -10,31 +10,31 @@ using System.Windows.Forms;
 
 namespace Yazlab1_1
 {
-    public partial class Form1 : System.Windows.Forms.Form
+    public partial class MainMenu : System.Windows.Forms.Form
     {
-        private int mapWidth;
-        private int mapHeight;
-        private int goldRate;
-        private int secretGoldRate;
-        private int startGold;
-        private int maxMovement;
-        private int aTargetCost;
-        private int bTargetCost;
-        private int cTargetCost;
-        private int dTargetCost;
-        private int aMovementCost;
-        private int bMovementCost;
-        private int cMovementCost;
-        private int dMovementCost;
-        private int cOpenSecretGold;
-        public Form1()
+        public static int mapWidth;
+        public static int mapHeight;
+        public static int goldRate;
+        public static int secretGoldRate;
+        public static int startGold;
+        public static int maxMovement;
+        public static int aTargetCost;
+        public static int bTargetCost;
+        public static int cTargetCost;
+        public static int dTargetCost;
+        public static int aMovementCost;
+        public static int bMovementCost;
+        public static int cMovementCost;
+        public static int dMovementCost;
+        public static int cOpenSecretGold;
+        public MainMenu()
         {
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+           
         }
 
         private void StartGameButton_Click(object sender, EventArgs e)
@@ -62,7 +62,7 @@ namespace Yazlab1_1
                 cOpenSecretGold = int.Parse(COpenSecretGoldTextBox.Text);
                 this.Hide();
                 Game GameScreen = new Game();
-                 GameScreen.ShowDialog();    
+                GameScreen.ShowDialog();    
                 this.Show();
             }
         }   

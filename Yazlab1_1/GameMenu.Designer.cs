@@ -1,6 +1,6 @@
 ﻿namespace Yazlab1_1
 {
-    partial class Form1
+    partial class MainMenu
     {
         /// <summary>
         ///Gerekli tasarımcı değişkeni.
@@ -396,7 +396,7 @@
             this.BTargetCostTextBox.TabIndex = 36;
             this.BTargetCostTextBox.Text = "10";
             // 
-            // Form1
+            // MainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -437,7 +437,7 @@
             this.Controls.Add(this.StartGameButton);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "Form1";
+            this.Name = "MainMenu";
             this.Text = "Altın Toplama Oyunu";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
