@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace Yazlab1_1
 {
-    public partial class Form1 : Form
+    public partial class Game : Form
     {
-        public Form1()
+        public Game()
         {
             InitializeComponent();
+        }
+
+        private void Game_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
