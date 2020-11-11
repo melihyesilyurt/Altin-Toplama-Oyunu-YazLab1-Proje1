@@ -16,7 +16,7 @@ namespace Yazlab1_1
         private int mapWidth = MainMenu.mapWidth;
         private int mapHeight = MainMenu.mapHeight;
         List<Button> gamesSquares = new List<Button>();
-        
+        private int tourManagement = 1;
         private int aGoldAmount;
         private int bGoldAmount;
         private int cGoldAmount;
@@ -38,7 +38,6 @@ namespace Yazlab1_1
             int goldBlock = 0;
             int countBlock = 0;
            // MessageBox.Show("" + goldMapMatris.Length);
-            //Random rnd = new Random();
             goldCount = (mapWidth * mapHeight * MainMenu.goldRate) / 100;
             secretGoldCount = (goldCount * MainMenu.secretGoldRate) / 100;
             goldCount -= secretGoldCount;
@@ -71,8 +70,7 @@ namespace Yazlab1_1
             while (goldBlock != goldCount)
             {
                 int num1 = rnd.Next(20);//uzunluk ilk
-                int num2 = rnd.Next(20);//genişlik 2
-                //Debug.WriteLine("num1: "+num1+ " num2:"+num2);            
+                int num2 = rnd.Next(20);//genişlik 2        
                 if (goldMapMatris[num1, num2] == 0)
                 {
                     if ((num1 == 0 && num2 == 0) || (num1 == 0 && num2 == mapWidth - 1) || (num1 == mapHeight - 1 && num2 == 0) || (num1 == mapHeight - 1 && num2 == mapWidth - 1))
@@ -102,8 +100,6 @@ namespace Yazlab1_1
                     }
                 }
             }
-
-
             aGoldAmount = MainMenu.startGold;
             bGoldAmount = MainMenu.startGold;
             cGoldAmount = MainMenu.startGold;
@@ -111,8 +107,7 @@ namespace Yazlab1_1
             aGoldText.Text = ("Altın: " + aGoldAmount);
             bGoldText.Text = ("Altın: " + bGoldAmount);
             cGoldText.Text = ("Altın: " + cGoldAmount);
-            dGoldText.Text = ("Altın: " + dGoldAmount);
-           
+            dGoldText.Text = ("Altın: " + dGoldAmount);  
                for(int i=0;i< mapHeight; i++)
                {
                    for(int j=0;j< mapWidth; j++)
@@ -171,7 +166,40 @@ namespace Yazlab1_1
         }
         private void button1_Click(object sender, EventArgs e)
         {
-           // MessageBox.Show("SecretGold"+ secretGoldCount+"Gold"+goldCount);
+            if(tourManagement == 1)
+            {
+                playA();
+            }
+            else if(tourManagement == 2)
+            {
+                playB();
+            }
+            else if (tourManagement == 3)
+            {
+                playC();
+            }
+            else if (tourManagement == 4)
+            {
+                playD();
+                tourManagement = 0;
+            }
+            tourManagement++;
+        }
+        private void playA()
+        {
+
+        }
+        private void playB()
+        {
+
+        }
+        private void playC()
+        {
+
+        }
+        private void playD()
+        {
+
         }
     }
 }
