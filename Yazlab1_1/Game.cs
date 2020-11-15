@@ -13,6 +13,7 @@ namespace Yazlab1_1
 {
     public partial class Game : Form
     {
+        int distance = 0;
         private int mapWidth = MainMenu.mapWidth;
         private int mapHeight = MainMenu.mapHeight;
         List<Button> gamesSquares = new List<Button>();
@@ -33,10 +34,17 @@ namespace Yazlab1_1
         private int btnName = 0;
         Random rnd = new Random();
         int[,] goldMapMatris = new int[MainMenu.mapHeight, MainMenu.mapWidth];
+        List<string> map = new List<string>();
+        string[,] mapMatris = new string[MainMenu.mapHeight, MainMenu.mapWidth];
+        int[,] distanceMatris = new int[MainMenu.mapHeight, MainMenu.mapWidth];
+        string satirad = "";
+        //Game t = new Game();
         public Game()
         {
             InitializeComponent();
         }
+        
+
         private void Game_Load(object sender, EventArgs e)
         {
             int goldBlock = 0;
@@ -150,6 +158,10 @@ namespace Yazlab1_1
                     countBlock++;
                 }
             }
+            ////////////////////////////////////////////////////////////////////////////
+          
+           
+
         }
         private static Button createButton(int btnNbr, int xPosition, int yPosition, List<Button> button)
         {
@@ -199,12 +211,164 @@ namespace Yazlab1_1
         private int objectA;
         private void PlayA()
         {
-            if (targetA[0] == 0 || targetA[1] == 0)
+            if (targetA[0] == 0 && targetA[1] == 0)
             {
-                targetA[0] = 3;
-                targetA[1] = 2;
+                //targetA[0] = 3;
+                //targetA[1] = 2;
                 aGoldAmount -= MainMenu.aTargetCost;
+                for (int i = 0; i < 20; i++)
+                {
+                    for (int j = 0; j < 20; j++)
+                    {
+                        mapMatris[i, j] = "0";
+                        distanceMatris[i, j] = 0;
+                    }
+                }
+                mapMatris[positionA[1], positionA[0]] = "A";
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 1; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
+                        {
+                            mapMatris[i, j] = "B";
+                            string satirad = "";
+                            for (int k = 0; i < 20; i++)
+                            {
+                                for (int l = 0; j < 20; j++)
+                                {
+                                    satirad += string.Join("", mapMatris[k, l]);
+                                }
+                                // Console.Write( satirad + "\n");
+                                map.Add(satirad);
+                                satirad = "";
+                            }
 
+                            var start = new Tile();
+
+                            start.Y = map.FindIndex(x => x.Contains("A"));
+                            start.X = map[start.Y].IndexOf("A");
+
+
+                            var finish = new Tile();
+                            finish.Y = map.FindIndex(x => x.Contains("B"));
+                            finish.X = map[finish.Y].IndexOf("B");
+
+                            start.SetDistance(finish.X, finish.Y);
+
+                            var activeTiles = new List<Tile>();
+                            activeTiles.Add(start);
+                            var visitedTiles = new List<Tile>();
+
+                            while (activeTiles.Any())
+                            {
+                                var checkTile = activeTiles.OrderBy(x => x.CostDistance).First();
+
+                                if (checkTile.X == finish.X && checkTile.Y == finish.Y)
+                                {
+                                    //We found the destination and we can be sure (Because the the OrderBy above)
+                                    //That it's the most low cost option. 
+                                    var tile = checkTile;
+                                    Console.WriteLine("Retracing steps backwards...");
+
+                                    while (true)
+                                    {
+                                        //Console.WriteLine($"{tile.X} : {tile.Y}");
+                                        Console.WriteLine("X:" + tile.X + " Y:" + tile.Y);
+                                        if (distance < tile.X + tile.Y)
+                                        {
+                                            distance = tile.X + tile.Y;
+                                            distanceMatris[i, j] = distance;
+                                        }
+
+                                        if (map[tile.Y][tile.X] == ' ')
+                                        {
+                                            var newMapRow = map[tile.Y].ToCharArray();
+                                            newMapRow[tile.X] = '*';
+                                            map[tile.Y] = new string(newMapRow);
+                                        }
+                                        tile = tile.Parent;
+                                        if (tile == null)
+                                        {
+                                            Console.WriteLine("Map looks like :");
+                                            map.ForEach(x => Console.WriteLine(x));
+                                            Console.WriteLine("Done!");
+                                            Console.WriteLine("Distance: " + distance);
+                                            return;
+                                        }
+                                    }
+
+                                }
+
+                                visitedTiles.Add(checkTile);
+                                activeTiles.Remove(checkTile);
+
+                                var walkableTiles = GetWalkableTiles(map, checkTile, finish);
+
+                                foreach (var walkableTile in walkableTiles)
+                                {
+                                    //We have already visited this tile so we don't need to do so again!
+                                    if (visitedTiles.Any(x => x.X == walkableTile.X && x.Y == walkableTile.Y))
+                                        continue;
+
+                                    //It's already in the active list, but that's OK, maybe this new tile has a better value (e.g. We might zigzag earlier but this is now straighter). 
+                                    if (activeTiles.Any(x => x.X == walkableTile.X && x.Y == walkableTile.Y))
+                                    {
+                                        var existingTile = activeTiles.First(x => x.X == walkableTile.X && x.Y == walkableTile.Y);
+                                        if (existingTile.CostDistance > checkTile.CostDistance)
+                                        {
+                                            activeTiles.Remove(existingTile);
+                                            activeTiles.Add(walkableTile);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //We've never seen this tile before so add it to the list. 
+                                        activeTiles.Add(walkableTile);
+                                    }
+                                }
+                            }
+
+                            Console.WriteLine("No Path Found!");
+
+
+                            ////////////////////////////////////////////////////////////////////////
+                        }
+                    }
+                }
+                for (int i = 0; i < 20; i++)
+                {
+                    for (int j = 0; j < 20; j++)
+                    {
+                        if(distance> distanceMatris[i, j] && distanceMatris[i, j]!= 0)
+                        {
+                            distance = distanceMatris[i, j];
+                        }
+                    }
+                }
+                for (int i = 0; i < 20; i++)
+                {
+                    for (int j = 0; j < 20; j++)
+                    {
+                        if (distance== distanceMatris[i,j])
+                        {
+                            targetA[0] = j;
+                            targetA[1] = i;
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
+                ////////////////////////////////////////////////////////////////
             }
             while (targetA[0] != positionA[0])
             {
@@ -220,7 +384,7 @@ namespace Yazlab1_1
                 {
                     for (int j = 0; j < mapWidth; j++)
                     {
-                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)//y,x
                         {
                             gamesSquares[countBlock].BackColor = Color.Yellow;
                         }
@@ -327,10 +491,9 @@ namespace Yazlab1_1
         private void CheckSecretGold(int[] coordinates, int objectA)
         {
             countBlock = 0;
-            MessageBox.Show("gold " + goldMapMatris[coordinates[0], coordinates[1]]);
+           // MessageBox.Show("gold " + goldMapMatris[coordinates[0], coordinates[1]]);
             if (goldMapMatris[coordinates[1], coordinates[0]] == -1)
             {
-                Debug.WriteLine("anasına girdik");
                 int num3 = rnd.Next(100);
                 if (num3 < 25)
                 {
@@ -355,6 +518,43 @@ namespace Yazlab1_1
                 Debug.WriteLine("countblock:" + objectA);
                 gamesSquares[objectA].Text = "" + goldMapMatris[coordinates[1], coordinates[0]];
             }
+        }
+        private static List<Tile> GetWalkableTiles(List<string> map, Tile currentTile, Tile targetTile)
+        {
+            var possibleTiles = new List<Tile>()
+            {
+                new Tile { X = currentTile.X, Y = currentTile.Y - 1, Parent = currentTile, Cost = currentTile.Cost + 1 },
+                new Tile { X = currentTile.X, Y = currentTile.Y + 1, Parent = currentTile, Cost = currentTile.Cost + 1},
+                new Tile { X = currentTile.X - 1, Y = currentTile.Y, Parent = currentTile, Cost = currentTile.Cost + 1 },
+                new Tile { X = currentTile.X + 1, Y = currentTile.Y, Parent = currentTile, Cost = currentTile.Cost + 1 },
+            };
+
+            possibleTiles.ForEach(tile => tile.SetDistance(targetTile.X, targetTile.Y));
+
+            var maxX = map.First().Length - 1;
+            var maxY = map.Count - 1;
+
+            return possibleTiles
+                    .Where(tile => tile.X >= 0 && tile.X <= maxX)
+                    .Where(tile => tile.Y >= 0 && tile.Y <= maxY)
+                    .Where(tile => map[tile.Y][tile.X] == '0' || map[tile.Y][tile.X] == 'B')
+                    .ToList();
+        }
+    }
+    class Tile
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Cost { get; set; }
+        public int Distance { get; set; }
+        public int CostDistance => Cost + Distance;
+        public Tile Parent { get; set; }
+
+        //The distance is essentially the estimated distance, ignoring walls to our target. 
+        //So how many tiles left and right, up and down, ignoring walls, to get there. 
+        public void SetDistance(int targetX, int targetY)
+        {
+            this.Distance = Math.Abs(targetX - X) + Math.Abs(targetY - Y);
         }
     }
 }
