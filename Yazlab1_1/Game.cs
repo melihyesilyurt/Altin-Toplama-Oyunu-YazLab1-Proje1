@@ -18,9 +18,9 @@ namespace Yazlab1_1
         private int mapHeight = MainMenu.mapHeight;
         List<Button> gamesSquares = new List<Button>();
         private int[] positionA = { 0, 0 };
-        private int[] positionB = { 0, MainMenu.mapWidth - 1 };
-        private int[] positionC = { MainMenu.mapHeight - 1, 0 };
-        private int[] positionD = { MainMenu.mapHeight - 1, MainMenu.mapWidth - 1 };
+        private int[] positionB = { MainMenu.mapWidth - 1,0 };
+        private int[] positionC = {0 , MainMenu.mapHeight - 1 };
+        private int[] positionD = { MainMenu.mapWidth - 1, MainMenu.mapHeight - 1 };
         int countBlock = 0;
         private int tourManagement = 1;
         private int aGoldAmount;
@@ -34,9 +34,8 @@ namespace Yazlab1_1
         private int btnName = 0;
         Random rnd = new Random();
         int[,] goldMapMatris = new int[MainMenu.mapHeight, MainMenu.mapWidth];
-        List<string> map = new List<string>();
-        string[,] mapMatris = new string[MainMenu.mapHeight, MainMenu.mapWidth];
         int[,] distanceMatris = new int[MainMenu.mapHeight, MainMenu.mapWidth];
+        int[,] gainMatris = new int[MainMenu.mapHeight, MainMenu.mapWidth];
         public Game()
         {
             InitializeComponent();
@@ -57,8 +56,7 @@ namespace Yazlab1_1
             while (goldBlock != secretGoldCount)
             {
                 int num1 = rnd.Next(mapHeight);//uzunluk ilk
-                int num2 = rnd.Next(mapWidth);//genişlik 2  
-                //Debug.WriteLine("num1: "+num1+ " num2:"+num2);            
+                int num2 = rnd.Next(mapWidth);//genişlik 2            
                 if (goldMapMatris[num1, num2] == 0)
                 {
                     if ((num1 == 0 && num2 == 0) || (num1 == 0 && num2 == mapWidth - 1) || (num1 == mapHeight - 1 && num2 == 0) || (num1 == mapHeight - 1 && num2 == mapWidth - 1))
@@ -174,9 +172,13 @@ namespace Yazlab1_1
         private int[] targetB = { 0, 0 };
         private int[] targetC = { 0, 0 };
         private int[] targetD = { 0, 0 };
+        private bool isDeadA = false;
+        private bool isDeadB = false;
+        private bool isDeadC = false;
+        private bool isDeadD = false;
         private void button1_Click(object sender, EventArgs e)
         {
-            tourManagement = 1;
+            tourManagement = 3;
             if (tourManagement == 1)
             {
                 PlayA();
@@ -201,22 +203,25 @@ namespace Yazlab1_1
             tourManagement++;
         }
         private int movement = 0;
-        private int objectA;
+        private int objectA = 0;
+        private int objectB = MainMenu.mapWidth - 1;
+
+        private int objectC = (MainMenu.mapWidth * MainMenu.mapHeight) - MainMenu.mapWidth;
+        private int objectD = ((MainMenu.mapWidth * MainMenu.mapHeight) - 1);
+
+
         private void PlayA()
         {
             if (targetA[0] == 0 && targetA[1] == 0)
             {
                 aGoldAmount -= MainMenu.aTargetCost;
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < mapHeight; i++)
                 {
-                    for (int j = 0; j < 20; j++)
+                    for (int j = 0; j < mapWidth; j++)
                     {
-                        mapMatris[i, j] = "0";
                         distanceMatris[i, j] = 0;
                     }
                 }
-                mapMatris[positionA[1], positionA[0]] = "A";
-
                 for (int i = 0; i < mapHeight; i++)
                 {
                     for (int j = 0; j < mapWidth; j++)
@@ -228,9 +233,9 @@ namespace Yazlab1_1
                         }
                     }
                 }
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < mapHeight; i++)
                 {
-                    for (int j = 0; j < 20; j++)
+                    for (int j = 0; j < mapWidth; j++)
                     {
                         if(distance> distanceMatris[i, j] && distanceMatris[i, j]!= 0)
                         {
@@ -238,9 +243,9 @@ namespace Yazlab1_1
                         }
                     }
                 }
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < mapHeight; i++)
                 {
-                    for (int j = 0; j < 20; j++)
+                    for (int j = 0; j < mapWidth; j++)
                     {
                         if (distance== distanceMatris[i,j])
                         {
@@ -249,9 +254,9 @@ namespace Yazlab1_1
                         }
                     }
                 }
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < mapHeight; i++)
                 {
-                    for (int j = 0; j < 20; j++)
+                    for (int j = 0; j < mapWidth; j++)
                     {
                         Debug.Write(" " + distanceMatris[i, j]);
                     }
@@ -370,19 +375,344 @@ namespace Yazlab1_1
                 distanceMatris[positionA[1], positionA[0]] = 0;
             }
         }
+        int cost;
         private void PlayB()
         {
-
+            if (targetB[0] == 0 && targetB[1] == 0)
+            {
+                bGoldAmount -= MainMenu.bTargetCost;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        gainMatris[i, j] = 0;
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
+                        {
+                            cost = (Math.Abs(i - positionB[1]) + Math.Abs(j - positionB[0]))*MainMenu.bMovementCost;
+                            cost -= goldMapMatris[i, j];
+                            gainMatris[i, j] = cost;
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (cost > gainMatris[i, j] && gainMatris[i, j] != 0)
+                        {
+                            cost = gainMatris[i, j];
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (cost == gainMatris[i, j])
+                        {
+                            targetB[0] = j;
+                            targetB[1] = i;
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        Debug.Write(" " + gainMatris[i, j]);
+                    }
+                    Debug.WriteLine("");
+                }
+                Debug.WriteLine("Hedef Belirlendi X:" + targetB[0] + " Y:" + targetB[1]);
+            }
+            while (targetB[0] != positionB[0])
+            {
+                if (movement == 3)
+                {
+                    movement = 0;
+                    break;
+                }
+                gamesSquares[objectB].UseVisualStyleBackColor = true;
+                countBlock = 0;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)//y,x
+                        {
+                            gamesSquares[countBlock].BackColor = Color.Yellow;
+                        }
+                        countBlock++;
+                    }
+                }
+                if (targetB[0] > positionB[0])
+                {
+                    if ((positionB[0] + 1 == positionA[0] || positionB[1] == positionA[1]) && (positionB[0] + 1 == positionC[0] || positionB[1] == positionC[1]) && (positionB[0] + 1 == positionD[0] || positionB[1] == positionD[1]))
+                    {
+                        Debug.WriteLine("Kaza önlendi");
+                    }
+                    else
+                    {
+                        positionB[0]++;
+                        movement++;
+                        bGoldAmount -= MainMenu.bMovementCost;
+                    }
+                }
+                else if (targetB[0] < positionB[0])
+                {
+                    if ((positionB[0] - 1 == positionA[0] || positionB[1] == positionA[1]) && (positionB[0] - 1 == positionC[0] || positionB[1] == positionC[1]) && (positionB[0] - 1 == positionD[0] || positionB[1] == positionD[1]))
+                    {
+                        Debug.WriteLine("Kaza önlendi");
+                    }
+                    else
+                    {
+                        positionB[0]--;
+                        movement++;
+                        bGoldAmount -= MainMenu.bMovementCost;
+                    }
+                }
+                objectB = positionB[0] + (mapWidth * positionB[1]);
+                gamesSquares[objectB].BackColor = Color.Red;
+                CheckSecretGold(positionB, objectB);
+            }
+            while (targetB[1] != positionB[1])
+            {
+                if (movement == 3)
+                {
+                    movement = 0;
+                    break;
+                }
+                gamesSquares[objectB].UseVisualStyleBackColor = true;
+                countBlock = 0;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
+                        {
+                            gamesSquares[countBlock].BackColor = Color.Yellow;
+                        }
+                        countBlock++;
+                    }
+                }
+                if (targetB[1] > positionB[1])
+                {
+                    if ((positionB[0] == positionA[0] || positionB[1] + 1 == positionA[1]) && (positionB[0] == positionC[0] || positionB[1] + 1 == positionC[1]) && (positionB[0] == positionD[0] || positionB[1] + 1 == positionD[1]))
+                    {
+                        Debug.WriteLine("Kaza önlendi");
+                    }
+                    else
+                    {
+                        positionB[1]++;
+                        movement++;
+                        bGoldAmount -= MainMenu.bMovementCost;
+                    }
+                }
+                if (targetB[1] < positionB[1])
+                {
+                    if ((positionB[0] == positionA[0] || positionB[1] - 1 == positionA[1]) && (positionB[0] == positionC[0] || positionB[1] - 1 == positionC[1]) && (positionB[0] == positionD[0] || positionB[1] - 1 == positionD[1]))
+                    {
+                        Debug.WriteLine("Kaza önlendi");
+                    }
+                    else
+                    {
+                        positionB[1]--;
+                        movement++;
+                        bGoldAmount -= MainMenu.bMovementCost;
+                    }
+                }
+                objectB = positionB[0] + (mapWidth * positionB[1]);
+                gamesSquares[objectB].BackColor = Color.Red;
+                CheckSecretGold(positionB, objectB);
+            }
+            if (targetB[0] == positionB[0] && targetB[1] == positionB[1])
+            {
+                targetB[0] = 0;
+                targetB[1] = 0;
+                bGoldAmount += goldMapMatris[positionB[1], positionB[0]];
+                bGoldText.Text = ("Altın: " + bGoldAmount);
+                goldMapMatris[positionB[1], positionB[0]] = 0;
+                gamesSquares[(positionB[1] * mapWidth) + positionB[0]].Text = "";
+                gainMatris[positionB[1], positionB[0]] = 0;
+            }
         }
         private void PlayC()
         {
-
+            if (targetC[0] == 0 && targetC[1] == 0)
+            {
+                cGoldAmount -= MainMenu.cTargetCost;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        gainMatris[i, j] = 0;
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
+                        {
+                            cost = (Math.Abs(i - positionC[1]) + Math.Abs(j - positionC[0])) * MainMenu.cMovementCost;
+                            cost -= goldMapMatris[i, j];
+                            gainMatris[i, j] = cost;
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (cost > gainMatris[i, j] && gainMatris[i, j] != 0)
+                        {
+                            cost = gainMatris[i, j];
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (cost == gainMatris[i, j])
+                        {
+                            targetC[0] = j;
+                            targetC[1] = i;
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        Debug.Write(" " + gainMatris[i, j]);
+                    }
+                    Debug.WriteLine("");
+                }
+                Debug.WriteLine("Hedef Belirlendi X:" + targetC[0] + " Y:" + targetC[1]);
+            }
+            while (targetC[0] != positionC[0])
+            {
+                if (movement == 3)
+                {
+                    movement = 0;
+                    break;
+                }
+                gamesSquares[objectC].UseVisualStyleBackColor = true;
+                countBlock = 0;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)//y,x
+                        {
+                            gamesSquares[countBlock].BackColor = Color.Yellow;
+                        }
+                        countBlock++;
+                    }
+                }
+                if (targetC[0] > positionC[0])
+                {
+                    if ((positionC[0] + 1 == positionA[0] || positionC[1] == positionA[1]) && (positionC[0] + 1 == positionB[0] || positionC[1] == positionB[1]) && (positionC[0] + 1 == positionD[0] || positionC[1] == positionD[1]))
+                    {
+                        Debug.WriteLine("Kaza önlendi");
+                    }
+                    else
+                    {
+                        positionC[0]++;
+                        movement++;
+                        cGoldAmount -= MainMenu.cMovementCost;
+                    }
+                }
+                else if (targetC[0] < positionC[0])
+                {
+                    if ((positionC[0] - 1 == positionA[0] || positionC[1] == positionA[1]) && (positionC[0] - 1 == positionB[0] || positionC[1] == positionB[1]) && (positionC[0] - 1 == positionD[0] || positionC[1] == positionD[1]))
+                    {
+                        Debug.WriteLine("Kaza önlendi");
+                    }
+                    else
+                    {
+                        positionC[0]--;
+                        movement++;
+                        cGoldAmount -= MainMenu.cMovementCost;
+                    }
+                }
+                objectC = positionC[0] + (mapWidth * positionC[1]);
+                gamesSquares[objectC].BackColor = Color.Green;
+                CheckSecretGold(positionC, objectC);
+            }
+            while (targetC[1] != positionC[1])
+            {
+                if (movement == 3)
+                {
+                    movement = 0;
+                    break;
+                }
+                gamesSquares[objectC].UseVisualStyleBackColor = true;
+                countBlock = 0;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
+                        {
+                            gamesSquares[countBlock].BackColor = Color.Yellow;
+                        }
+                        countBlock++;
+                    }
+                }
+                if (targetC[1] > positionC[1])
+                {
+                    if ((positionC[0] == positionA[0] || positionC[1] + 1 == positionA[1]) && (positionC[0] == positionB[0] || positionC[1] + 1 == positionB[1]) && (positionC[0] == positionD[0] || positionC[1] + 1 == positionD[1]))
+                    {
+                        Debug.WriteLine("Kaza önlendi");
+                    }
+                    else
+                    {
+                        positionC[1]++;
+                        movement++;
+                        cGoldAmount -= MainMenu.cMovementCost;
+                    }
+                }
+                if (targetC[1] < positionC[1])
+                {
+                    if ((positionC[0] == positionA[0] || positionC[1] - 1 == positionA[1]) && (positionC[0] == positionB[0] || positionC[1] - 1 == positionB[1]) && (positionC[0] == positionD[0] || positionC[1] - 1 == positionD[1]))
+                    {
+                        Debug.WriteLine("Kaza önlendi");
+                    }
+                    else
+                    {
+                        positionC[1]--;
+                        movement++;
+                        cGoldAmount -= MainMenu.cMovementCost;
+                    }
+                }
+                objectC = positionC[0] + (mapWidth * positionC[1]);
+                gamesSquares[objectC].BackColor = Color.Green;
+                CheckSecretGold(positionC, objectC);
+            }
+            if (targetC[0] == positionC[0] && targetC[1] == positionC[1])
+            {
+                targetC[0] = 0;
+                targetC[1] = 0;
+                cGoldAmount += goldMapMatris[positionC[1], positionC[0]];
+                cGoldText.Text = ("Altın: " + cGoldAmount);
+                goldMapMatris[positionC[1], positionC[0]] = 0;
+                gamesSquares[(positionC[1] * mapWidth) + positionC[0]].Text = "";
+                gainMatris[positionC[1], positionC[0]] = 0;
+            }
         }
         private void PlayD()
         {
 
         }
-        private void CheckSecretGold(int[] coordinates, int objectA)
+        private void CheckSecretGold(int[] coordinates, int objectPlayer)
         {
             countBlock = 0;
             if (goldMapMatris[coordinates[1], coordinates[0]] == -1)
@@ -408,8 +738,8 @@ namespace Yazlab1_1
                     goldMapMatris[coordinates[1], coordinates[0]] = 20;
                     Debug.WriteLine("20");
                 }
-                Debug.WriteLine("countblock:" + objectA);
-                gamesSquares[objectA].Text = "" + goldMapMatris[coordinates[1], coordinates[0]];
+                Debug.WriteLine("countblock:" + objectPlayer);
+                gamesSquares[objectPlayer].Text = "" + goldMapMatris[coordinates[1], coordinates[0]];
             }
         }
     }
