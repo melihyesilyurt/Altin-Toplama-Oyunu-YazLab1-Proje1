@@ -36,6 +36,7 @@ namespace Yazlab1_1
         int[,] goldMapMatris = new int[MainMenu.mapHeight, MainMenu.mapWidth];
         int[,] distanceMatris = new int[MainMenu.mapHeight, MainMenu.mapWidth];
         int[,] gainMatris = new int[MainMenu.mapHeight, MainMenu.mapWidth];
+        int[,] secretGoldMatrisC = new int[MainMenu.mapHeight, MainMenu.mapWidth];
         public Game()
         {
             InitializeComponent();
@@ -172,6 +173,7 @@ namespace Yazlab1_1
         private int[] targetB = { 0, 0 };
         private int[] targetC = { 0, 0 };
         private int[] targetD = { 0, 0 };
+        private int[] coordinatesSecretGold = { 0, 0 };
         private bool isDeadA = false;
         private bool isDeadB = false;
         private bool isDeadC = false;
@@ -544,6 +546,7 @@ namespace Yazlab1_1
         }
         private void PlayC()
         {
+            cSuperPower(positionC);
             if (targetC[0] == 0 && targetC[1] == 0)
             {
                 cGoldAmount -= MainMenu.cTargetCost;
@@ -712,6 +715,54 @@ namespace Yazlab1_1
         {
 
         }
+        private void cSuperPower(int [] positions)
+        {
+            for (int t=0;t<MainMenu.cOpenSecretGold ;t++)
+            {
+                int distanceSecretGold = 0;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        secretGoldMatrisC[i, j] = 0;
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] == -1)
+                        {
+                            distanceSecretGold = (Math.Abs(i - positions[1]) + Math.Abs(j - positions[0]));
+                            secretGoldMatrisC[i, j] = distanceSecretGold;
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (distanceSecretGold > secretGoldMatrisC[i, j] && secretGoldMatrisC[i, j] != 0)
+                        {
+                            distanceSecretGold = secretGoldMatrisC[i, j];
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (distanceSecretGold == secretGoldMatrisC[i, j])
+                        {
+                            coordinatesSecretGold[0] = j;
+                            coordinatesSecretGold[1] = i;
+                        }
+                    }
+                }
+                int buttonNumber = ((coordinatesSecretGold[0]) + (coordinatesSecretGold[1] * mapWidth));
+                CheckSecretGold(coordinatesSecretGold, buttonNumber);
+            }     
+        }
         private void CheckSecretGold(int[] coordinates, int objectPlayer)
         {
             countBlock = 0;
@@ -739,6 +790,7 @@ namespace Yazlab1_1
                     Debug.WriteLine("20");
                 }
                 Debug.WriteLine("countblock:" + objectPlayer);
+                
                 gamesSquares[objectPlayer].Text = "" + goldMapMatris[coordinates[1], coordinates[0]];
             }
         }
