@@ -180,7 +180,7 @@ namespace Yazlab1_1
         private bool isDeadD = false;
         private void button1_Click(object sender, EventArgs e)
         {
-            tourManagement = 4;
+            tourManagement = 2;
             if (tourManagement == 1)
             {
                 PlayA();
@@ -209,6 +209,7 @@ namespace Yazlab1_1
         private int objectB = MainMenu.mapWidth - 1;
         private int objectC = (MainMenu.mapWidth * MainMenu.mapHeight) - MainMenu.mapWidth;
         private int objectD = ((MainMenu.mapWidth * MainMenu.mapHeight) - 1);
+        private bool turnOver = false;
         private void PlayA()
         {
             if (targetA[0] == 0 && targetA[1] == 0)
@@ -263,10 +264,13 @@ namespace Yazlab1_1
                 }
                 Debug.WriteLine("Hedef Belirlendi X:" + targetA[0] + " Y:" + targetA[1]);
             }
+            movement = 0;
+            turnOver = false;
             while (targetA[0] != positionA[0])
             {
-                if (movement == 3)
+                if (movement == 3 || turnOver== true)
                 {
+                    turnOver = true;
                     movement = 0;
                     break;
                 }
@@ -313,8 +317,9 @@ namespace Yazlab1_1
             }
             while (targetA[1] != positionA[1])
             {
-                if (movement == 3)
+                if (movement == 3 || turnOver == true)
                 {
+                    turnOver = true;
                     movement = 0;
                     break;
                 }
@@ -414,10 +419,13 @@ namespace Yazlab1_1
                 }
                 Debug.WriteLine("Hedef Belirlendi X:" + targetB[0] + " Y:" + targetB[1]);
             }
+            movement = 0;
+            turnOver = false;
             while (targetB[0] != positionB[0])
             {
-                if (movement == 3)
+                if (movement == 3 || turnOver == true)
                 {
+                    turnOver = true;
                     movement = 0;
                     break;
                 }
@@ -464,8 +472,9 @@ namespace Yazlab1_1
             }
             while (targetB[1] != positionB[1])
             {
-                if (movement == 3)
+                if (movement == 3 || turnOver == true)
                 {
+                    turnOver = true;
                     movement = 0;
                     break;
                 }
@@ -565,10 +574,13 @@ namespace Yazlab1_1
                 }
                 Debug.WriteLine("Hedef Belirlendi X:" + targetC[0] + " Y:" + targetC[1]);
             }
+            movement = 0;
+            turnOver = false;
             while (targetC[0] != positionC[0])
             {
-                if (movement == 3)
+                if (movement == 3 || turnOver == true)
                 {
+                    turnOver = true;
                     movement = 0;
                     break;
                 }
@@ -603,8 +615,9 @@ namespace Yazlab1_1
             }
             while (targetC[1] != positionC[1])
             {
-                if (movement == 3)
+                if (movement == 3 || turnOver == true)
                 {
+                    turnOver = true;
                     movement = 0;
                     break;
                 }
@@ -715,10 +728,13 @@ namespace Yazlab1_1
                 }
                 Debug.WriteLine("Hedef Belirlendi X:" + targetD[0] + " Y:" + targetD[1]);
             }
+            movement = 0;
+            turnOver = false;
             while (targetD[0] != positionD[0])
             {
-                if (movement == 3)
+                if (movement == 3 || turnOver == true)
                 {
+                    turnOver = true;
                     movement = 0;
                     break;
                 }
@@ -765,8 +781,9 @@ namespace Yazlab1_1
             }
             while (targetD[1] != positionD[1])
             {
-                if (movement == 3)
+                if (movement == 3 || turnOver == true)
                 {
+                    turnOver = true;
                     movement = 0;
                     break;
                 }
