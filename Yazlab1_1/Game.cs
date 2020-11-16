@@ -271,6 +271,18 @@ namespace Yazlab1_1
                     break;
                 }
                 gamesSquares[objectA].UseVisualStyleBackColor = true;
+                if(positionA[0]==positionB[0] && positionA[1] == positionB[1])
+                {
+                    gamesSquares[objectA].BackColor = Color.Red;
+                }
+                else if(positionA[0] == positionC[0] && positionA[1] == positionC[1])
+                {
+                    gamesSquares[objectA].BackColor = Color.Green;
+                }
+                else if (positionA[0] == positionD[0] && positionA[1] == positionD[1])
+                {
+                    gamesSquares[objectA].BackColor = Color.Magenta;
+                }
                 countBlock = 0;
                 for (int i = 0; i < mapHeight; i++)
                 {
@@ -410,6 +422,18 @@ namespace Yazlab1_1
                     break;
                 }
                 gamesSquares[objectB].UseVisualStyleBackColor = true;
+                if (positionB[0] == positionA[0] && positionB[1] == positionA[1])
+                {
+                    gamesSquares[objectB].BackColor = Color.Blue;
+                }
+                else if (positionB[0] == positionC[0] && positionB[1] == positionC[1])
+                {
+                    gamesSquares[objectB].BackColor = Color.Green;
+                }
+                else if (positionB[0] == positionD[0] && positionB[1] == positionD[1])
+                {
+                    gamesSquares[objectB].BackColor = Color.Magenta;
+                }
                 countBlock = 0;
                 for (int i = 0; i < mapHeight; i++)
                 {
@@ -585,6 +609,18 @@ namespace Yazlab1_1
                     break;
                 }
                 gamesSquares[objectC].UseVisualStyleBackColor = true;
+                if (positionC[0] == positionB[0] && positionC[1] == positionB[1])
+                {
+                    gamesSquares[objectC].BackColor = Color.Red;
+                }
+                else if (positionC[0] == positionA[0] && positionC[1] == positionA[1])
+                {
+                    gamesSquares[objectC].BackColor = Color.Blue;
+                }
+                else if (positionC[0] == positionD[0] && positionC[1] == positionD[1])
+                {
+                    gamesSquares[objectC].BackColor = Color.Magenta;
+                }
                 countBlock = 0;
                 for (int i = 0; i < mapHeight; i++)
                 {
@@ -687,6 +723,18 @@ namespace Yazlab1_1
                     break;
                 }
                 gamesSquares[objectD].UseVisualStyleBackColor = true;
+                if (positionD[0] == positionB[0] && positionD[1] == positionB[1])
+                {
+                    gamesSquares[objectD].BackColor = Color.Red;
+                }
+                else if (positionD[0] == positionC[0] && positionD[1] == positionC[1])
+                {
+                    gamesSquares[objectD].BackColor = Color.Green;
+                }
+                else if (positionD[0] == positionA[0] && positionD[1] == positionA[1])
+                {
+                    gamesSquares[objectD].BackColor = Color.Blue;
+                }
                 countBlock = 0;
                 for (int i = 0; i < mapHeight; i++)
                 {
