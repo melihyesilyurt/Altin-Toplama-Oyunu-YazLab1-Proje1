@@ -547,7 +547,7 @@ namespace Yazlab1_1
             }
         }
         int cost;
-        private void PlayB()
+        private void PlayB()//0 karı görmüyor
         {
             if ((targetB[0] == 0 && targetB[1] == 0) || goldMapMatris[targetB[1],targetB[0]]==0)
             {
@@ -568,7 +568,7 @@ namespace Yazlab1_1
                         {
                             cost = (Math.Abs(i - positionB[1]) + Math.Abs(j - positionB[0]))*MainMenu.bMovementCost;
                             cost -= goldMapMatris[i, j];
-                            gainMatris[i, j] = cost;
+                            gainMatris[i, j] = cost+1;
                         }
                     }
                 }
@@ -752,7 +752,7 @@ namespace Yazlab1_1
                         {
                             cost = (Math.Abs(i - positionC[1]) + Math.Abs(j - positionC[0])) * MainMenu.cMovementCost;
                             cost -= goldMapMatris[i, j];
-                            gainMatris[i, j] = cost;
+                            gainMatris[i, j] = cost + 1;
                         }
                     }
                 }
@@ -935,7 +935,7 @@ namespace Yazlab1_1
                         {
                             cost = (Math.Abs(i - positionD[1]) + Math.Abs(j - positionD[0])) * MainMenu.dMovementCost;
                             cost -= goldMapMatris[i, j];
-                            gainMatris[i, j] = cost;
+                            gainMatris[i, j] = cost + 1;
                         }
                     }
                 }
