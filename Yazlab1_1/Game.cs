@@ -8,11 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Yazlab1_1
 {
     public partial class Game : Form
-    {
+    {       
         int distance = 0;
         private int mapWidth = MainMenu.mapWidth;
         private int mapHeight = MainMenu.mapHeight;
@@ -43,6 +44,14 @@ namespace Yazlab1_1
         }
         private void Game_Load(object sender, EventArgs e)
         {
+            using (System.IO.StreamWriter aOyuncusu = new System.IO.StreamWriter(@"..\\aOyuncusu.txt", false))
+                aOyuncusu.WriteLine("X:" + positionA[0] + " Y:" + positionA[1]);
+            using (System.IO.StreamWriter bOyuncusu = new System.IO.StreamWriter(@"..\\bOyuncusu.txt", false))
+                bOyuncusu.WriteLine("X:" + positionB[0] + " Y:" + positionB[1]);
+            using (System.IO.StreamWriter cOyuncusu = new System.IO.StreamWriter(@"..\\cOyuncusu.txt", false))
+                cOyuncusu.WriteLine("X:" + positionC[0] + " Y:" + positionC[1]);
+            using (System.IO.StreamWriter dOyuncusu = new System.IO.StreamWriter(@"..\\dOyuncusu.txt", false))
+                dOyuncusu.WriteLine("X:" + positionD[0] + " Y:" + positionD[1]);
             int goldBlock = 0;
             goldCount = (mapWidth * mapHeight * MainMenu.goldRate) / 100;
             secretGoldCount = (goldCount * MainMenu.secretGoldRate) / 100;
@@ -179,20 +188,27 @@ namespace Yazlab1_1
         private bool isDeadC = false;
         private bool isDeadD = false;
         private bool gameOver = false;
+        /*
+   FileStream aOyuncusu = File.Create("..\\Yazlab1_1\\AOyuncusuHareket.txt");
+        FileStream bOyuncusu = File.Create("..\\Yazlab1_1\\BOyuncusuHareket.txt");
+        FileStream cOyuncusu = File.Create("..\\Yazlab1_1\\COyuncusuHareket.txt");
+        FileStream dOyuncusu = File.Create("..\\Yazlab1_1\\DOyuncusuHareket.txt");
+        FileStream oyunOzet = File.Create("..\\Yazlab1_1\\OyunOzeti.txt");
+         
+         */
         private void button1_Click(object sender, EventArgs e)
         {
-
-            if (tourManagement == 1)
-            {
-                if (isDeadA == false)
+                if (tourManagement == 1)
                 {
-                    PlayA();
-                }
-                    if(isDeadB==false)
+                    if (isDeadA == false)
+                    {
+                        PlayA();
+                    }
+                    if (isDeadB == false)
                     {
                         tourManagement = 2;
                     }
-                   else if (isDeadC == false)
+                    else if (isDeadC == false)
                     {
                         tourManagement = 3;
                     }
@@ -200,68 +216,68 @@ namespace Yazlab1_1
                     {
                         tourManagement = 4;
                     }
-                aGoldText.Text = ("Altın: " + aGoldAmount);
-            }
-            else if (tourManagement == 2)
-            {
-                if (isDeadB == false)
-                {
-                    PlayB();
+                    aGoldText.Text = ("Altın: " + aGoldAmount);
                 }
-                if (isDeadC == false)
+                else if (tourManagement == 2)
                 {
-                    tourManagement = 3;
+                    if (isDeadB == false)
+                    {
+                        PlayB();
+                    }
+                    if (isDeadC == false)
+                    {
+                        tourManagement = 3;
+                    }
+                    else if (isDeadD == false)
+                    {
+                        tourManagement = 4;
+                    }
+                    else if (isDeadA == false)
+                    {
+                        tourManagement = 1;
+                    }
+                    bGoldText.Text = ("Altın: " + bGoldAmount);
                 }
-                else if (isDeadD == false)
+                else if (tourManagement == 3)
                 {
-                    tourManagement = 4;
+                    if (isDeadC == false)
+                    {
+                        PlayC();
+                    }
+                    if (isDeadD == false)
+                    {
+                        tourManagement = 4;
+                    }
+                    else if (isDeadA == false)
+                    {
+                        tourManagement = 1;
+                    }
+                    else if (isDeadB == false)
+                    {
+                        tourManagement = 2;
+                    }
+                    cGoldText.Text = ("Altın: " + cGoldAmount);
                 }
-                else if (isDeadA == false)
+                else if (tourManagement == 4)
                 {
-                    tourManagement = 1;
+                    if (isDeadD == false)
+                    {
+                        PlayD();
+                    }
+                    if (isDeadA == false)
+                    {
+                        tourManagement = 1;
+                    }
+                    else if (isDeadB == false)
+                    {
+                        tourManagement = 2;
+                    }
+                    else if (isDeadC == false)
+                    {
+                        tourManagement = 3;
+                    }
+                    dGoldText.Text = ("Altın: " + dGoldAmount);
                 }
-                bGoldText.Text = ("Altın: " + bGoldAmount);
-            }
-           else  if (tourManagement == 3)
-            {
-                if (isDeadC == false)
-                {
-                    PlayC();
-                }
-                if (isDeadD == false)
-                {
-                    tourManagement = 4;
-                }
-                else if (isDeadA == false)
-                {
-                    tourManagement = 1;
-                }
-                else if (isDeadB == false)
-                {
-                    tourManagement = 2;
-                }
-                cGoldText.Text = ("Altın: " + cGoldAmount);
-            }
-          else   if (tourManagement == 4)
-            {
-                if (isDeadD == false)
-                {
-                    PlayD();
-                }
-                if (isDeadA == false)
-                {
-                    tourManagement = 1;
-                }
-                else if (isDeadB == false)
-                {
-                    tourManagement = 2;
-                }
-                else if (isDeadC == false)
-                {
-                    tourManagement = 3;
-                }
-                dGoldText.Text = ("Altın: " + dGoldAmount);
-            }
             if (gameOver == false)
             {
                 gameOver = true;
@@ -412,12 +428,16 @@ namespace Yazlab1_1
                         positionA[0]++;
                         movement++;
                         aGoldAmount -= MainMenu.aMovementCost;
+                    using (System.IO.StreamWriter aOyuncusu = new System.IO.StreamWriter(@"..\\aOyuncusu.txt", true))
+                        aOyuncusu.WriteLine("X:"+positionA[0]+" Y:"+positionA[1]);
                 }
                 else if (targetA[0] < positionA[0])
                 {         
                         positionA[0]--;
                         movement++;
                         aGoldAmount -= MainMenu.aMovementCost;
+                    using (System.IO.StreamWriter aOyuncusu = new System.IO.StreamWriter(@"..\\aOyuncusu.txt", true))
+                        aOyuncusu.WriteLine("X:" + positionA[0] + " Y:" + positionA[1]);
                 }
                 objectA = positionA[0] + (mapWidth * positionA[1]);
                 gamesSquares[objectA].BackColor = Color.Blue;
@@ -454,12 +474,16 @@ namespace Yazlab1_1
                         positionA[1]++;
                         movement++;
                         aGoldAmount -= MainMenu.aMovementCost;
+                    using (System.IO.StreamWriter aOyuncusu = new System.IO.StreamWriter(@"..\\aOyuncusu.txt", true))
+                        aOyuncusu.WriteLine("X:" + positionA[0] + " Y:" + positionA[1]);
                 }
                 if (targetA[1] < positionA[1])
                 {
                         positionA[1]--;
                         movement++;
                         aGoldAmount -= MainMenu.aMovementCost;
+                    using (System.IO.StreamWriter aOyuncusu = new System.IO.StreamWriter(@"..\\aOyuncusu.txt", true))
+                        aOyuncusu.WriteLine("X:" + positionA[0] + " Y:" + positionA[1]);
                 }
                 objectA = positionA[0] + (mapWidth * positionA[1]);
                 gamesSquares[objectA].BackColor = Color.Blue;
@@ -578,12 +602,16 @@ namespace Yazlab1_1
                         positionB[0]++;
                         movement++;
                         bGoldAmount -= MainMenu.bMovementCost;
+                    using (System.IO.StreamWriter bOyuncusu = new System.IO.StreamWriter(@"..\\bOyuncusu.txt", true))
+                        bOyuncusu.WriteLine("X:" + positionB[0] + " Y:" + positionB[1]);
                 }
                 else if (targetB[0] < positionB[0])
                 {
                         positionB[0]--;
                         movement++;
                         bGoldAmount -= MainMenu.bMovementCost;
+                    using (System.IO.StreamWriter bOyuncusu = new System.IO.StreamWriter(@"..\\bOyuncusu.txt", true))
+                        bOyuncusu.WriteLine("X:" + positionB[0] + " Y:" + positionB[1]);
                 }
                 objectB = positionB[0] + (mapWidth * positionB[1]);
                 gamesSquares[objectB].BackColor = Color.Red;
@@ -620,12 +648,16 @@ namespace Yazlab1_1
                         positionB[1]++;
                         movement++;
                         bGoldAmount -= MainMenu.bMovementCost;
+                    using (System.IO.StreamWriter bOyuncusu = new System.IO.StreamWriter(@"..\\bOyuncusu.txt", true))
+                        bOyuncusu.WriteLine("X:" + positionB[0] + " Y:" + positionB[1]);
                 }
                 if (targetB[1] < positionB[1])
                 {
                         positionB[1]--;
                         movement++;
                         bGoldAmount -= MainMenu.bMovementCost;
+                    using (System.IO.StreamWriter bOyuncusu = new System.IO.StreamWriter(@"..\\bOyuncusu.txt", true))
+                        bOyuncusu.WriteLine("X:" + positionB[0] + " Y:" + positionB[1]);
                 }
                 objectB = positionB[0] + (mapWidth * positionB[1]);
                 gamesSquares[objectB].BackColor = Color.Red;
@@ -732,12 +764,16 @@ namespace Yazlab1_1
                         positionC[0]++;
                         movement++;
                         cGoldAmount -= MainMenu.cMovementCost;
+                    using (System.IO.StreamWriter cOyuncusu = new System.IO.StreamWriter(@"..\\cOyuncusu.txt", true))
+                        cOyuncusu.WriteLine("X:" + positionC[0] + " Y:" + positionC[1]);
                 }
                 else if (targetC[0] < positionC[0])
                 {
                         positionC[0]--;
                         movement++;
                         cGoldAmount -= MainMenu.cMovementCost;
+                    using (System.IO.StreamWriter cOyuncusu = new System.IO.StreamWriter(@"..\\cOyuncusu.txt", true))
+                        cOyuncusu.WriteLine("X:" + positionC[0] + " Y:" + positionC[1]);
                 }
                 objectC = positionC[0] + (mapWidth * positionC[1]);
                 gamesSquares[objectC].BackColor = Color.Green;
@@ -786,12 +822,16 @@ namespace Yazlab1_1
                         positionC[1]++;
                         movement++;
                         cGoldAmount -= MainMenu.cMovementCost;
+                    using (System.IO.StreamWriter cOyuncusu = new System.IO.StreamWriter(@"..\\cOyuncusu.txt", true))
+                        cOyuncusu.WriteLine("X:" + positionC[0] + " Y:" + positionC[1]);
                 }
                 if (targetC[1] < positionC[1])
                 {
                         positionC[1]--;
                         movement++;
                         cGoldAmount -= MainMenu.cMovementCost;
+                    using (System.IO.StreamWriter cOyuncusu = new System.IO.StreamWriter(@"..\\cOyuncusu.txt", true))
+                        cOyuncusu.WriteLine("X:" + positionC[0] + " Y:" + positionC[1]);
                 }
                 objectC = positionC[0] + (mapWidth * positionC[1]);
                 gamesSquares[objectC].BackColor = Color.Green;
@@ -909,12 +949,16 @@ namespace Yazlab1_1
                     positionD[0]++;
                     movement++;
                     dGoldAmount -= MainMenu.dMovementCost;
+                    using (System.IO.StreamWriter dOyuncusu = new System.IO.StreamWriter(@"..\\dOyuncusu.txt", true))
+                        dOyuncusu.WriteLine("X:" + positionD[0] + " Y:" + positionD[1]);
                 }
                 else if (targetD[0] < positionD[0])
                 {
                     positionD[0]--;
                     movement++;
                     dGoldAmount -= MainMenu.dMovementCost;
+                    using (System.IO.StreamWriter dOyuncusu = new System.IO.StreamWriter(@"..\\dOyuncusu.txt", true))
+                        dOyuncusu.WriteLine("X:" + positionD[0] + " Y:" + positionD[1]);
                 }
                 objectD = positionD[0] + (mapWidth * positionD[1]);
                 gamesSquares[objectD].BackColor = Color.Magenta;
@@ -951,12 +995,16 @@ namespace Yazlab1_1
                     positionD[1]++;
                     movement++;
                     dGoldAmount -= MainMenu.dMovementCost;
+                    using (System.IO.StreamWriter dOyuncusu = new System.IO.StreamWriter(@"..\\dOyuncusu.txt", true))
+                        dOyuncusu.WriteLine("X:" + positionD[0] + " Y:" + positionD[1]);
                 }
                 if (targetD[1] < positionD[1])
                 {
                     positionD[1]--;
                     movement++;
                     dGoldAmount -= MainMenu.dMovementCost;
+                    using (System.IO.StreamWriter dOyuncusu = new System.IO.StreamWriter(@"..\\dOyuncusu.txt", true))
+                        dOyuncusu.WriteLine("X:" + positionD[0] + " Y:" + positionD[1]);
                 }
                 objectD = positionD[0] + (mapWidth * positionD[1]);
                 gamesSquares[objectD].BackColor = Color.Magenta;
