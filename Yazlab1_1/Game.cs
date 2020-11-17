@@ -52,6 +52,8 @@ namespace Yazlab1_1
                 cOyuncusu.WriteLine("X:" + positionC[0] + " Y:" + positionC[1]);
             using (System.IO.StreamWriter dOyuncusu = new System.IO.StreamWriter(@"..\\dOyuncusu.txt", false))
                 dOyuncusu.WriteLine("X:" + positionD[0] + " Y:" + positionD[1]);
+            using (System.IO.StreamWriter oyunOzet = new System.IO.StreamWriter(@"..\\OyunOzet.txt", false))
+                oyunOzet.WriteLine("Oyun Ozeti");
             int goldBlock = 0;
             goldCount = (mapWidth * mapHeight * MainMenu.goldRate) / 100;
             secretGoldCount = (goldCount * MainMenu.secretGoldRate) / 100;
@@ -182,20 +184,24 @@ namespace Yazlab1_1
         private int[] targetB = { 0, 0 };
         private int[] targetC = { 0, 0 };
         private int[] targetD = { 0, 0 };
+        private int aStep = 0;
+        private int bStep = 0;
+        private int cStep = 0;
+        private int dStep = 0;
+        private int spentGoldA = 0;
+        private int spentGoldB = 0;
+        private int spentGoldC = 0;
+        private int spentGoldD = 0;
+        private int collectedGoldA = 0;
+        private int collectedGoldB = 0;
+        private int collectedGoldC = 0;
+        private int collectedGoldD = 0;
         private int[] coordinatesSecretGold = { 0, 0 };
         private bool isDeadA = false;
         private bool isDeadB = false;
         private bool isDeadC = false;
         private bool isDeadD = false;
         private bool gameOver = false;
-        /*
-   FileStream aOyuncusu = File.Create("..\\Yazlab1_1\\AOyuncusuHareket.txt");
-        FileStream bOyuncusu = File.Create("..\\Yazlab1_1\\BOyuncusuHareket.txt");
-        FileStream cOyuncusu = File.Create("..\\Yazlab1_1\\COyuncusuHareket.txt");
-        FileStream dOyuncusu = File.Create("..\\Yazlab1_1\\DOyuncusuHareket.txt");
-        FileStream oyunOzet = File.Create("..\\Yazlab1_1\\OyunOzeti.txt");
-         
-         */
         private void button1_Click(object sender, EventArgs e)
         {
                 if (tourManagement == 1)
@@ -304,23 +310,53 @@ namespace Yazlab1_1
                 {
                     tourManagement = 9;
                     MessageBox.Show("Oyun Bitti");
-                if (isDeadA == false && isDeadB == true && isDeadC == true && isDeadD == true)
+                if (aGoldAmount>bGoldAmount && aGoldAmount > cGoldAmount && aGoldAmount > dGoldAmount)
                 {
                     MessageBox.Show("A oyuncusu kazandı");
                 }
-                else if(isDeadA == true && isDeadB == false && isDeadC == true && isDeadD == true)
+                else if (bGoldAmount > aGoldAmount && bGoldAmount > cGoldAmount && bGoldAmount > dGoldAmount)
                 {
                     MessageBox.Show("B oyuncusu kazandı");
                 }
-                else if (isDeadA == true && isDeadB == true && isDeadC == false && isDeadD == true)
+                else if (cGoldAmount > bGoldAmount && cGoldAmount > aGoldAmount && cGoldAmount > dGoldAmount)
                 {
                     MessageBox.Show("C oyuncusu kazandı");
                 }
-                else if (isDeadA == true && isDeadB == true && isDeadC == true && isDeadD == false)
+                else if (dGoldAmount > bGoldAmount && dGoldAmount > cGoldAmount && dGoldAmount > aGoldAmount)
                 {
                     MessageBox.Show("D oyuncusu kazandı");
                 }
-            }
+                using (System.IO.StreamWriter oyunOzet = new System.IO.StreamWriter(@"..\\OyunOzet.txt", true))
+                {
+                    oyunOzet.WriteLine("");
+                    oyunOzet.WriteLine("A Oyuncusu: ");
+                    oyunOzet.WriteLine("Toplam Adım Sayısı: "+aStep);
+                    oyunOzet.WriteLine("Harcanan Altın miktarı: "+spentGoldA);
+                    oyunOzet.WriteLine("Kasadaki Altın miktarı: "+aGoldAmount);
+                    oyunOzet.WriteLine("Toplanan Altın miktarı: "+collectedGoldA);
+                    oyunOzet.WriteLine("");
+                    oyunOzet.WriteLine("");
+                    oyunOzet.WriteLine("B Oyuncusu: ");
+                    oyunOzet.WriteLine("Toplam Adım Sayısı: "+bStep);
+                    oyunOzet.WriteLine("Harcanan Altın miktarı: "+spentGoldB);
+                    oyunOzet.WriteLine("Kasadaki Altın miktarı: "+bGoldAmount);
+                    oyunOzet.WriteLine("Toplanan Altın miktarı: "+collectedGoldB);
+                    oyunOzet.WriteLine("");
+                    oyunOzet.WriteLine("");
+                    oyunOzet.WriteLine("C Oyuncusu: ");
+                    oyunOzet.WriteLine("Toplam Adım Sayısı: "+cStep);
+                    oyunOzet.WriteLine("Harcanan Altın miktarı: "+spentGoldC);
+                    oyunOzet.WriteLine("Kasadaki Altın miktarı: "+cGoldAmount);
+                    oyunOzet.WriteLine("Toplanan Altın miktarı: "+collectedGoldC);
+                    oyunOzet.WriteLine("");
+                    oyunOzet.WriteLine("");
+                    oyunOzet.WriteLine("D Oyuncusu: ");
+                    oyunOzet.WriteLine("Toplam Adım Sayısı: "+dStep);
+                    oyunOzet.WriteLine("Harcanan Altın miktarı: "+spentGoldD);
+                    oyunOzet.WriteLine("Kasadaki Altın miktarı: "+dGoldAmount);
+                    oyunOzet.WriteLine("Toplanan Altın miktarı: "+collectedGoldD);
+                }
+            }   
         }
         private int movement = 0;
         private int objectA = 0;
@@ -333,6 +369,7 @@ namespace Yazlab1_1
             if ((targetA[0] == 0 && targetA[1] == 0) || goldMapMatris[targetA[1], targetA[0]] == 0)
             {
                 aGoldAmount -= MainMenu.aTargetCost;
+                spentGoldA += MainMenu.aTargetCost;
                 for (int i = 0; i < mapHeight; i++)
                 {
                     for (int j = 0; j < mapWidth; j++)
@@ -428,6 +465,8 @@ namespace Yazlab1_1
                         positionA[0]++;
                         movement++;
                         aGoldAmount -= MainMenu.aMovementCost;
+                    spentGoldA += MainMenu.aMovementCost;
+                    aStep++;
                     using (System.IO.StreamWriter aOyuncusu = new System.IO.StreamWriter(@"..\\aOyuncusu.txt", true))
                         aOyuncusu.WriteLine("X:"+positionA[0]+" Y:"+positionA[1]);
                 }
@@ -436,6 +475,8 @@ namespace Yazlab1_1
                         positionA[0]--;
                         movement++;
                         aGoldAmount -= MainMenu.aMovementCost;
+                    spentGoldA += MainMenu.aMovementCost;
+                    aStep++;
                     using (System.IO.StreamWriter aOyuncusu = new System.IO.StreamWriter(@"..\\aOyuncusu.txt", true))
                         aOyuncusu.WriteLine("X:" + positionA[0] + " Y:" + positionA[1]);
                 }
@@ -474,6 +515,8 @@ namespace Yazlab1_1
                         positionA[1]++;
                         movement++;
                         aGoldAmount -= MainMenu.aMovementCost;
+                    spentGoldA += MainMenu.aMovementCost;
+                    aStep++;
                     using (System.IO.StreamWriter aOyuncusu = new System.IO.StreamWriter(@"..\\aOyuncusu.txt", true))
                         aOyuncusu.WriteLine("X:" + positionA[0] + " Y:" + positionA[1]);
                 }
@@ -482,6 +525,8 @@ namespace Yazlab1_1
                         positionA[1]--;
                         movement++;
                         aGoldAmount -= MainMenu.aMovementCost;
+                    spentGoldA += MainMenu.aMovementCost;
+                    aStep++;
                     using (System.IO.StreamWriter aOyuncusu = new System.IO.StreamWriter(@"..\\aOyuncusu.txt", true))
                         aOyuncusu.WriteLine("X:" + positionA[0] + " Y:" + positionA[1]);
                 }
@@ -494,6 +539,7 @@ namespace Yazlab1_1
                 targetA[0] = 0;
                 targetA[1] = 0;
                 aGoldAmount += goldMapMatris[positionA[1], positionA[0]];
+                collectedGoldA+= goldMapMatris[positionA[1], positionA[0]];
                 aGoldText.Text = ("Altın: " + aGoldAmount);
                 goldMapMatris[positionA[1], positionA[0]] = 0;
                 gamesSquares[(positionA[1] * mapWidth) + positionA[0]].Text = "";
@@ -506,6 +552,7 @@ namespace Yazlab1_1
             if ((targetB[0] == 0 && targetB[1] == 0) || goldMapMatris[targetB[1],targetB[0]]==0)
             {
                 bGoldAmount -= MainMenu.bTargetCost;
+                spentGoldB += MainMenu.bTargetCost;
                 for (int i = 0; i < mapHeight; i++)
                 {
                     for (int j = 0; j < mapWidth; j++)
@@ -602,6 +649,8 @@ namespace Yazlab1_1
                         positionB[0]++;
                         movement++;
                         bGoldAmount -= MainMenu.bMovementCost;
+                    spentGoldB += MainMenu.bMovementCost;
+                    bStep++;
                     using (System.IO.StreamWriter bOyuncusu = new System.IO.StreamWriter(@"..\\bOyuncusu.txt", true))
                         bOyuncusu.WriteLine("X:" + positionB[0] + " Y:" + positionB[1]);
                 }
@@ -610,6 +659,8 @@ namespace Yazlab1_1
                         positionB[0]--;
                         movement++;
                         bGoldAmount -= MainMenu.bMovementCost;
+                    spentGoldB += MainMenu.bMovementCost;
+                    bStep++;
                     using (System.IO.StreamWriter bOyuncusu = new System.IO.StreamWriter(@"..\\bOyuncusu.txt", true))
                         bOyuncusu.WriteLine("X:" + positionB[0] + " Y:" + positionB[1]);
                 }
@@ -648,6 +699,8 @@ namespace Yazlab1_1
                         positionB[1]++;
                         movement++;
                         bGoldAmount -= MainMenu.bMovementCost;
+                    spentGoldB += MainMenu.bMovementCost;
+                    bStep++;
                     using (System.IO.StreamWriter bOyuncusu = new System.IO.StreamWriter(@"..\\bOyuncusu.txt", true))
                         bOyuncusu.WriteLine("X:" + positionB[0] + " Y:" + positionB[1]);
                 }
@@ -656,6 +709,8 @@ namespace Yazlab1_1
                         positionB[1]--;
                         movement++;
                         bGoldAmount -= MainMenu.bMovementCost;
+                    spentGoldB += MainMenu.bMovementCost;
+                    bStep++;
                     using (System.IO.StreamWriter bOyuncusu = new System.IO.StreamWriter(@"..\\bOyuncusu.txt", true))
                         bOyuncusu.WriteLine("X:" + positionB[0] + " Y:" + positionB[1]);
                 }
@@ -668,6 +723,7 @@ namespace Yazlab1_1
                 targetB[0] = 0;
                 targetB[1] = 0;
                 bGoldAmount += goldMapMatris[positionB[1], positionB[0]];
+                collectedGoldB += goldMapMatris[positionB[1], positionB[0]];
                 bGoldText.Text = ("Altın: " + bGoldAmount);
                 goldMapMatris[positionB[1], positionB[0]] = 0;
                 gamesSquares[(positionB[1] * mapWidth) + positionB[0]].Text = "";
@@ -680,6 +736,7 @@ namespace Yazlab1_1
             if ((targetC[0] == 0 && targetC[1] == 0) || goldMapMatris[targetC[1], targetC[0]] == 0)
             {
                 cGoldAmount -= MainMenu.cTargetCost;
+                spentGoldC += MainMenu.cTargetCost;
                 for (int i = 0; i < mapHeight; i++)
                 {
                     for (int j = 0; j < mapWidth; j++)
@@ -764,6 +821,8 @@ namespace Yazlab1_1
                         positionC[0]++;
                         movement++;
                         cGoldAmount -= MainMenu.cMovementCost;
+                    spentGoldC += MainMenu.cMovementCost;
+                    cStep++;
                     using (System.IO.StreamWriter cOyuncusu = new System.IO.StreamWriter(@"..\\cOyuncusu.txt", true))
                         cOyuncusu.WriteLine("X:" + positionC[0] + " Y:" + positionC[1]);
                 }
@@ -772,6 +831,8 @@ namespace Yazlab1_1
                         positionC[0]--;
                         movement++;
                         cGoldAmount -= MainMenu.cMovementCost;
+                    spentGoldC += MainMenu.cMovementCost;
+                    cStep++;
                     using (System.IO.StreamWriter cOyuncusu = new System.IO.StreamWriter(@"..\\cOyuncusu.txt", true))
                         cOyuncusu.WriteLine("X:" + positionC[0] + " Y:" + positionC[1]);
                 }
@@ -822,6 +883,8 @@ namespace Yazlab1_1
                         positionC[1]++;
                         movement++;
                         cGoldAmount -= MainMenu.cMovementCost;
+                    spentGoldC += MainMenu.cMovementCost;
+                    cStep++;
                     using (System.IO.StreamWriter cOyuncusu = new System.IO.StreamWriter(@"..\\cOyuncusu.txt", true))
                         cOyuncusu.WriteLine("X:" + positionC[0] + " Y:" + positionC[1]);
                 }
@@ -830,6 +893,8 @@ namespace Yazlab1_1
                         positionC[1]--;
                         movement++;
                         cGoldAmount -= MainMenu.cMovementCost;
+                    spentGoldC += MainMenu.cMovementCost;
+                    cStep++;
                     using (System.IO.StreamWriter cOyuncusu = new System.IO.StreamWriter(@"..\\cOyuncusu.txt", true))
                         cOyuncusu.WriteLine("X:" + positionC[0] + " Y:" + positionC[1]);
                 }
@@ -842,6 +907,7 @@ namespace Yazlab1_1
                 targetC[0] = 0;
                 targetC[1] = 0;
                 cGoldAmount += goldMapMatris[positionC[1], positionC[0]];
+                collectedGoldC += goldMapMatris[positionC[1], positionC[0]];
                 cGoldText.Text = ("Altın: " + cGoldAmount);
                 goldMapMatris[positionC[1], positionC[0]] = 0;
                 gamesSquares[(positionC[1] * mapWidth) + positionC[0]].Text = "";
@@ -853,6 +919,7 @@ namespace Yazlab1_1
             if ((targetD[0] == 0 && targetD[1] == 0) || goldMapMatris[targetD[1], targetD[0]] == 0)
             {
                 dGoldAmount -= MainMenu.dTargetCost;
+                spentGoldD += MainMenu.dTargetCost;
                 for (int i = 0; i < mapHeight; i++)
                 {
                     for (int j = 0; j < mapWidth; j++)
@@ -949,6 +1016,8 @@ namespace Yazlab1_1
                     positionD[0]++;
                     movement++;
                     dGoldAmount -= MainMenu.dMovementCost;
+                    spentGoldD += MainMenu.dMovementCost;
+                    dStep++;
                     using (System.IO.StreamWriter dOyuncusu = new System.IO.StreamWriter(@"..\\dOyuncusu.txt", true))
                         dOyuncusu.WriteLine("X:" + positionD[0] + " Y:" + positionD[1]);
                 }
@@ -957,6 +1026,8 @@ namespace Yazlab1_1
                     positionD[0]--;
                     movement++;
                     dGoldAmount -= MainMenu.dMovementCost;
+                    spentGoldD += MainMenu.dMovementCost;
+                    dStep++;
                     using (System.IO.StreamWriter dOyuncusu = new System.IO.StreamWriter(@"..\\dOyuncusu.txt", true))
                         dOyuncusu.WriteLine("X:" + positionD[0] + " Y:" + positionD[1]);
                 }
@@ -995,6 +1066,8 @@ namespace Yazlab1_1
                     positionD[1]++;
                     movement++;
                     dGoldAmount -= MainMenu.dMovementCost;
+                    spentGoldD += MainMenu.dMovementCost;
+                    dStep++;
                     using (System.IO.StreamWriter dOyuncusu = new System.IO.StreamWriter(@"..\\dOyuncusu.txt", true))
                         dOyuncusu.WriteLine("X:" + positionD[0] + " Y:" + positionD[1]);
                 }
@@ -1003,6 +1076,8 @@ namespace Yazlab1_1
                     positionD[1]--;
                     movement++;
                     dGoldAmount -= MainMenu.dMovementCost;
+                    spentGoldD += MainMenu.dMovementCost;
+                    dStep++;
                     using (System.IO.StreamWriter dOyuncusu = new System.IO.StreamWriter(@"..\\dOyuncusu.txt", true))
                         dOyuncusu.WriteLine("X:" + positionD[0] + " Y:" + positionD[1]);
                 }
@@ -1015,6 +1090,7 @@ namespace Yazlab1_1
                 targetD[0] = 0;
                 targetD[1] = 0;
                 dGoldAmount += goldMapMatris[positionD[1], positionD[0]];
+                collectedGoldD += goldMapMatris[positionD[1], positionD[0]];
                 dGoldText.Text = ("Altın: " + dGoldAmount);
                 goldMapMatris[positionD[1], positionD[0]] = 0;
                 gamesSquares[(positionD[1] * mapWidth) + positionD[0]].Text = "";
@@ -1095,8 +1171,7 @@ namespace Yazlab1_1
                     goldMapMatris[coordinates[1], coordinates[0]] = 20;
                     Debug.WriteLine("20");
                 }
-                Debug.WriteLine("countblock:" + objectPlayer);
-                
+                Debug.WriteLine("countblock:" + objectPlayer);    
                 gamesSquares[objectPlayer].Text = "" + goldMapMatris[coordinates[1], coordinates[0]];
             }
         }
