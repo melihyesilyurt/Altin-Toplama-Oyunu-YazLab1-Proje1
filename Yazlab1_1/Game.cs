@@ -178,31 +178,133 @@ namespace Yazlab1_1
         private bool isDeadB = false;
         private bool isDeadC = false;
         private bool isDeadD = false;
+        private bool gameOver = false;
         private void button1_Click(object sender, EventArgs e)
         {
-            tourManagement = 2;
+
             if (tourManagement == 1)
             {
-                PlayA();
+                if (isDeadA == false)
+                {
+                    PlayA();
+                }
+                    if(isDeadB==false)
+                    {
+                        tourManagement = 2;
+                    }
+                   else if (isDeadC == false)
+                    {
+                        tourManagement = 3;
+                    }
+                    else if (isDeadD == false)
+                    {
+                        tourManagement = 4;
+                    }
                 aGoldText.Text = ("Altın: " + aGoldAmount);
             }
             else if (tourManagement == 2)
             {
-                PlayB();
+                if (isDeadB == false)
+                {
+                    PlayB();
+                }
+                if (isDeadC == false)
+                {
+                    tourManagement = 3;
+                }
+                else if (isDeadD == false)
+                {
+                    tourManagement = 4;
+                }
+                else if (isDeadA == false)
+                {
+                    tourManagement = 1;
+                }
                 bGoldText.Text = ("Altın: " + bGoldAmount);
             }
-            else if (tourManagement == 3)
+           else  if (tourManagement == 3)
             {
-                PlayC();
+                if (isDeadC == false)
+                {
+                    PlayC();
+                }
+                if (isDeadD == false)
+                {
+                    tourManagement = 4;
+                }
+                else if (isDeadA == false)
+                {
+                    tourManagement = 1;
+                }
+                else if (isDeadB == false)
+                {
+                    tourManagement = 2;
+                }
                 cGoldText.Text = ("Altın: " + cGoldAmount);
             }
-            else if (tourManagement == 4)
+          else   if (tourManagement == 4)
             {
-                PlayD();
+                if (isDeadD == false)
+                {
+                    PlayD();
+                }
+                if (isDeadA == false)
+                {
+                    tourManagement = 1;
+                }
+                else if (isDeadB == false)
+                {
+                    tourManagement = 2;
+                }
+                else if (isDeadC == false)
+                {
+                    tourManagement = 3;
+                }
                 dGoldText.Text = ("Altın: " + dGoldAmount);
-                tourManagement = 0;
             }
-            tourManagement++;
+            if (gameOver == false)
+            {
+                gameOver = true;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
+                        {
+                            gameOver = false;
+                        }
+                    }
+                }
+            }
+            if (isDeadA == true && isDeadB == true && isDeadC == true && isDeadD == true)
+            {
+                gameOver = true;
+            }
+            if ((isDeadA == false && isDeadB == true && isDeadC == true && isDeadD == true) || (isDeadA == true && isDeadB == false && isDeadC == true && isDeadD == true) || (isDeadA == true && isDeadB == true && isDeadC == false && isDeadD == true) || (isDeadA == true && isDeadB == true && isDeadC == true && isDeadD == false))
+            {
+                gameOver = true;
+            }
+            if (gameOver==true)
+                {
+                    tourManagement = 9;
+                    MessageBox.Show("Oyun Bitti");
+                if (isDeadA == false && isDeadB == true && isDeadC == true && isDeadD == true)
+                {
+                    MessageBox.Show("A oyuncusu kazandı");
+                }
+                else if(isDeadA == true && isDeadB == false && isDeadC == true && isDeadD == true)
+                {
+                    MessageBox.Show("B oyuncusu kazandı");
+                }
+                else if (isDeadA == true && isDeadB == true && isDeadC == false && isDeadD == true)
+                {
+                    MessageBox.Show("C oyuncusu kazandı");
+                }
+                else if (isDeadA == true && isDeadB == true && isDeadC == true && isDeadD == false)
+                {
+                    MessageBox.Show("D oyuncusu kazandı");
+                }
+            }
         }
         private int movement = 0;
         private int objectA = 0;
@@ -212,7 +314,7 @@ namespace Yazlab1_1
         private bool turnOver = false;
         private void PlayA()
         {
-            if (targetA[0] == 0 && targetA[1] == 0)
+            if ((targetA[0] == 0 && targetA[1] == 0) || goldMapMatris[targetA[1], targetA[0]] == 0)
             {
                 aGoldAmount -= MainMenu.aTargetCost;
                 for (int i = 0; i < mapHeight; i++)
@@ -254,6 +356,7 @@ namespace Yazlab1_1
                         }
                     }
                 }
+                distance = 0;
                 for (int i = 0; i < mapHeight; i++)
                 {
                     for (int j = 0; j < mapWidth; j++)
@@ -268,6 +371,11 @@ namespace Yazlab1_1
             turnOver = false;
             while (targetA[0] != positionA[0])
             {
+                if (aGoldAmount <= 0)
+                {
+                    isDeadA = true;
+                    break;
+                }
                 if (movement == 3 || turnOver== true)
                 {
                     turnOver = true;
@@ -317,6 +425,11 @@ namespace Yazlab1_1
             }
             while (targetA[1] != positionA[1])
             {
+                if (aGoldAmount <= 0)
+                {
+                    isDeadA = true;
+                    break;
+                }
                 if (movement == 3 || turnOver == true)
                 {
                     turnOver = true;
@@ -366,7 +479,7 @@ namespace Yazlab1_1
         int cost;
         private void PlayB()
         {
-            if (targetB[0] == 0 && targetB[1] == 0)
+            if ((targetB[0] == 0 && targetB[1] == 0) || goldMapMatris[targetB[1],targetB[0]]==0)
             {
                 bGoldAmount -= MainMenu.bTargetCost;
                 for (int i = 0; i < mapHeight; i++)
@@ -409,13 +522,14 @@ namespace Yazlab1_1
                         }
                     }
                 }
+                cost = 0;
                 for (int i = 0; i < mapHeight; i++)
                 {
                     for (int j = 0; j < mapWidth; j++)
                     {
                         Debug.Write(" " + gainMatris[i, j]);
                     }
-                    Debug.WriteLine("");
+                    Debug.WriteLine("\n");
                 }
                 Debug.WriteLine("Hedef Belirlendi X:" + targetB[0] + " Y:" + targetB[1]);
             }
@@ -423,6 +537,11 @@ namespace Yazlab1_1
             turnOver = false;
             while (targetB[0] != positionB[0])
             {
+                if (bGoldAmount <= 0)
+                {
+                    isDeadB = true;
+                    break;
+                }
                 if (movement == 3 || turnOver == true)
                 {
                     turnOver = true;
@@ -472,6 +591,11 @@ namespace Yazlab1_1
             }
             while (targetB[1] != positionB[1])
             {
+                if (bGoldAmount <= 0)
+                {
+                    isDeadB = true;
+                    break;
+                }
                 if (movement == 3 || turnOver == true)
                 {
                     turnOver = true;
@@ -521,7 +645,7 @@ namespace Yazlab1_1
         private void PlayC()
         {
             cSuperPower(positionC);
-            if (targetC[0] == 0 && targetC[1] == 0)
+            if ((targetC[0] == 0 && targetC[1] == 0) || goldMapMatris[targetC[1], targetC[0]] == 0)
             {
                 cGoldAmount -= MainMenu.cTargetCost;
                 for (int i = 0; i < mapHeight; i++)
@@ -564,6 +688,7 @@ namespace Yazlab1_1
                         }
                     }
                 }
+                cost = 0;
                 for (int i = 0; i < mapHeight; i++)
                 {
                     for (int j = 0; j < mapWidth; j++)
@@ -578,6 +703,11 @@ namespace Yazlab1_1
             turnOver = false;
             while (targetC[0] != positionC[0])
             {
+                if (cGoldAmount <= 0)
+                {
+                    isDeadC = true;
+                    break;
+                }
                 if (movement == 3 || turnOver == true)
                 {
                     turnOver = true;
@@ -615,6 +745,11 @@ namespace Yazlab1_1
             }
             while (targetC[1] != positionC[1])
             {
+                if (cGoldAmount <= 0)
+                {
+                    isDeadC = true;
+                    break;
+                }
                 if (movement == 3 || turnOver == true)
                 {
                     turnOver = true;
@@ -675,7 +810,7 @@ namespace Yazlab1_1
         }
         private void PlayD()
         {
-            if (targetD[0] == 0 && targetD[1] == 0)
+            if ((targetD[0] == 0 && targetD[1] == 0) || goldMapMatris[targetD[1], targetD[0]] == 0)
             {
                 dGoldAmount -= MainMenu.dTargetCost;
                 for (int i = 0; i < mapHeight; i++)
@@ -718,6 +853,7 @@ namespace Yazlab1_1
                         }
                     }
                 }
+                cost = 0;
                 for (int i = 0; i < mapHeight; i++)
                 {
                     for (int j = 0; j < mapWidth; j++)
@@ -732,6 +868,11 @@ namespace Yazlab1_1
             turnOver = false;
             while (targetD[0] != positionD[0])
             {
+                if (dGoldAmount <= 0)
+                {
+                    isDeadD = true;
+                    break;
+                }
                 if (movement == 3 || turnOver == true)
                 {
                     turnOver = true;
@@ -781,6 +922,11 @@ namespace Yazlab1_1
             }
             while (targetD[1] != positionD[1])
             {
+                if (dGoldAmount <= 0)
+                {
+                    isDeadD = true;
+                    break;
+                }
                 if (movement == 3 || turnOver == true)
                 {
                     turnOver = true;
