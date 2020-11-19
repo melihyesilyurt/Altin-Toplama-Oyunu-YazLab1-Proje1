@@ -202,9 +202,6 @@ namespace Yazlab1_1
         private bool isDeadC = false;
         private bool isDeadD = false;
         private bool gameOver = false;
-        private bool firstTargetA = false;
-        private bool firstTargetB = false;
-        private bool firstTargetC = false;
         private void button1_Click(object sender, EventArgs e)
         {
                 if (tourManagement == 1)
@@ -369,9 +366,8 @@ namespace Yazlab1_1
         private bool turnOver = false;
         private void PlayA()
         {
-            if (firstTargetA == false)
+            if ((targetA[0] == 0 && targetA[1] == 0) || goldMapMatris[targetA[1], targetA[0]] == 0)
             {
-                firstTargetA = true;
                 aGoldAmount -= MainMenu.aTargetCost;
                 spentGoldA += MainMenu.aTargetCost;
                 for (int i = 0; i < mapHeight; i++)
@@ -396,7 +392,7 @@ namespace Yazlab1_1
                 {
                     for (int j = 0; j < mapWidth; j++)
                     {
-                        if(distance> distanceMatris[i, j] && distanceMatris[i, j]!= 0)
+                        if (distance > distanceMatris[i, j] && distanceMatris[i, j] != 0)
                         {
                             distance = distanceMatris[i, j];
                         }
@@ -406,7 +402,7 @@ namespace Yazlab1_1
                 {
                     for (int j = 0; j < mapWidth; j++)
                     {
-                        if (distance== distanceMatris[i,j])
+                        if (distance == distanceMatris[i, j])
                         {
                             targetA[0] = j;
                             targetA[1] = i;
@@ -607,9 +603,8 @@ namespace Yazlab1_1
         int cost;
         private void PlayB()
         {
-            if (firstTargetB==false)
+            if ((targetB[0] == 0 && targetB[1] == 0) || goldMapMatris[targetB[1], targetB[0]] == 0)
             {
-                firstTargetB = true;
                 bGoldAmount -= MainMenu.bTargetCost;
                 spentGoldB += MainMenu.bTargetCost;
                 for (int i = 0; i < mapHeight; i++)
@@ -625,9 +620,9 @@ namespace Yazlab1_1
                     {
                         if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
                         {
-                            cost = (Math.Abs(i - positionB[1]) + Math.Abs(j - positionB[0]))*MainMenu.bMovementCost;
+                            cost = (Math.Abs(i - positionB[1]) + Math.Abs(j - positionB[0])) * MainMenu.bMovementCost;
                             cost -= goldMapMatris[i, j];
-                            gainMatris[i, j] = cost+1;
+                            gainMatris[i, j] = cost + 1;
                         }
                     }
                 }
@@ -847,9 +842,10 @@ namespace Yazlab1_1
         private void PlayC()
         {
             cSuperPower(positionC);
-            if (firstTargetC == false)
+            movement = 0;
+            turnOver = false;
+            if ((targetC[0] == 0 && targetC[1] == 0) || goldMapMatris[targetC[1], targetC[0]] == 0)
             {
-                firstTargetC = true;
                 cGoldAmount -= MainMenu.cTargetCost;
                 spentGoldC += MainMenu.cTargetCost;
                 for (int i = 0; i < mapHeight; i++)
@@ -903,8 +899,6 @@ namespace Yazlab1_1
                 }
                 Debug.WriteLine("Hedef Belirlendi X:" + targetC[0] + " Y:" + targetC[1]);
             }
-            movement = 0;
-            turnOver = false;
             while (targetC[0] != positionC[0])
             {
                 if (cGoldAmount <= 0)

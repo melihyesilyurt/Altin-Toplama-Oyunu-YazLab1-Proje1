@@ -1,28 +1,55 @@
 Oyun Ozeti
 
 A Oyuncusu: 
-Toplam Adım Sayısı: 35
-Harcanan Altın miktarı: 275
-Kasadaki Altın miktarı: 100
+Toplam Adım Sayısı: 47
+Harcanan Altın miktarı: 345
+Kasadaki Altın miktarı: 30
 Toplanan Altın miktarı: 175
 
 
 B Oyuncusu: 
-Toplam Adım Sayısı: 41
+Toplam Adım Sayısı: 45
 Harcanan Altın miktarı: 385
 Kasadaki Altın miktarı: 0
 Toplanan Altın miktarı: 185
 
 
 C Oyuncusu: 
-Toplam Adım Sayısı: 28
-Harcanan Altın miktarı: 320
+Toplam Adım Sayısı: 29
+Harcanan Altın miktarı: 310
 Kasadaki Altın miktarı: 0
-Toplanan Altın miktarı: 120
+Toplanan Altın miktarı: 110
 
 
 D Oyuncusu: 
-Toplam Adım Sayısı: 22
-Harcanan Altın miktarı: 390
-Kasadaki Altın miktarı: -5
+Toplam Adım Sayısı: 28
+Harcanan Altın miktarı: 420
+Kasadaki Altın miktarı: 0
+Toplanan Altın miktarı: 220
+
+A Oyuncusu: 
+Toplam Adım Sayısı: 47
+Harcanan Altın miktarı: 345
+Kasadaki Altın miktarı: 30
+Toplanan Altın miktarı: 175
+
+
+B Oyuncusu: 
+Toplam Adım Sayısı: 45
+Harcanan Altın miktarı: 385
+Kasadaki Altın miktarı: 0
 Toplanan Altın miktarı: 185
+
+
+C Oyuncusu: 
+Toplam Adım Sayısı: 29
+Harcanan Altın miktarı: 310
+Kasadaki Altın miktarı: 0
+Toplanan Altın miktarı: 110
+
+
+D Oyuncusu: 
+Toplam Adım Sayısı: 28
+Harcanan Altın miktarı: 420
+Kasadaki Altın miktarı: 0
+Toplanan Altın miktarı: 220
