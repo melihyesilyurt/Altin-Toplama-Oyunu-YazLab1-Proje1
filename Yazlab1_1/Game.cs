@@ -202,6 +202,9 @@ namespace Yazlab1_1
         private bool isDeadC = false;
         private bool isDeadD = false;
         private bool gameOver = false;
+        private bool firstTargetA = false;
+        private bool firstTargetB = false;
+        private bool firstTargetC = false;
         private void button1_Click(object sender, EventArgs e)
         {
                 if (tourManagement == 1)
@@ -366,8 +369,9 @@ namespace Yazlab1_1
         private bool turnOver = false;
         private void PlayA()
         {
-            if ((targetA[0] == 0 && targetA[1] == 0) || goldMapMatris[targetA[1], targetA[0]] == 0)
+            if (firstTargetA == false)
             {
+                firstTargetA = true;
                 aGoldAmount -= MainMenu.aTargetCost;
                 spentGoldA += MainMenu.aTargetCost;
                 for (int i = 0; i < mapHeight; i++)
@@ -545,12 +549,67 @@ namespace Yazlab1_1
                 gamesSquares[(positionA[1] * mapWidth) + positionA[0]].Text = "";
                 distanceMatris[positionA[1], positionA[0]] = 0;
             }
+            if ((targetA[0] == 0 && targetA[1] == 0) || goldMapMatris[targetA[1], targetA[0]] == 0)
+            {
+                aGoldAmount -= MainMenu.aTargetCost;
+                spentGoldA += MainMenu.aTargetCost;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        distanceMatris[i, j] = 0;
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
+                        {
+                            distance = Math.Abs(i - positionA[1]) + Math.Abs(j - positionA[0]);
+                            distanceMatris[i, j] = distance;
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (distance > distanceMatris[i, j] && distanceMatris[i, j] != 0)
+                        {
+                            distance = distanceMatris[i, j];
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (distance == distanceMatris[i, j])
+                        {
+                            targetA[0] = j;
+                            targetA[1] = i;
+                        }
+                    }
+                }
+                distance = 0;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        Debug.Write(" " + distanceMatris[i, j]);
+                    }
+                    Debug.WriteLine("");
+                }
+                Debug.WriteLine("Hedef Belirlendi X:" + targetA[0] + " Y:" + targetA[1]);
+            }
         }
         int cost;
         private void PlayB()
         {
-            if ((targetB[0] == 0 && targetB[1] == 0) || goldMapMatris[targetB[1],targetB[0]]==0)
+            if (firstTargetB==false)
             {
+                firstTargetB = true;
                 bGoldAmount -= MainMenu.bTargetCost;
                 spentGoldB += MainMenu.bTargetCost;
                 for (int i = 0; i < mapHeight; i++)
@@ -729,12 +788,68 @@ namespace Yazlab1_1
                 gamesSquares[(positionB[1] * mapWidth) + positionB[0]].Text = "";
                 gainMatris[positionB[1], positionB[0]] = 0;
             }
+            if ((targetB[0] == 0 && targetB[1] == 0) || goldMapMatris[targetB[1], targetB[0]] == 0)
+            {
+                bGoldAmount -= MainMenu.bTargetCost;
+                spentGoldB += MainMenu.bTargetCost;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        gainMatris[i, j] = 0;
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
+                        {
+                            cost = (Math.Abs(i - positionB[1]) + Math.Abs(j - positionB[0])) * MainMenu.bMovementCost;
+                            cost -= goldMapMatris[i, j];
+                            gainMatris[i, j] = cost + 1;
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (cost > gainMatris[i, j] && gainMatris[i, j] != 0)
+                        {
+                            cost = gainMatris[i, j];
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (cost == gainMatris[i, j])
+                        {
+                            targetB[0] = j;
+                            targetB[1] = i;
+                        }
+                    }
+                }
+                cost = 0;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        Debug.Write(" " + gainMatris[i, j]);
+                    }
+                    Debug.WriteLine("\n");
+                }
+                Debug.WriteLine("Hedef Belirlendi X:" + targetB[0] + " Y:" + targetB[1]);
+            }
         }
         private void PlayC()
         {
             cSuperPower(positionC);
-            if ((targetC[0] == 0 && targetC[1] == 0) || goldMapMatris[targetC[1], targetC[0]] == 0)
+            if (firstTargetC == false)
             {
+                firstTargetC = true;
                 cGoldAmount -= MainMenu.cTargetCost;
                 spentGoldC += MainMenu.cTargetCost;
                 for (int i = 0; i < mapHeight; i++)
@@ -912,6 +1027,61 @@ namespace Yazlab1_1
                 goldMapMatris[positionC[1], positionC[0]] = 0;
                 gamesSquares[(positionC[1] * mapWidth) + positionC[0]].Text = "";
                 gainMatris[positionC[1], positionC[0]] = 0;
+            }
+            if ((targetC[0] == 0 && targetC[1] == 0) || goldMapMatris[targetC[1], targetC[0]] == 0)
+            {
+                cGoldAmount -= MainMenu.cTargetCost;
+                spentGoldC += MainMenu.cTargetCost;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        gainMatris[i, j] = 0;
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (goldMapMatris[i, j] != 0 && goldMapMatris[i, j] != -1)
+                        {
+                            cost = (Math.Abs(i - positionC[1]) + Math.Abs(j - positionC[0])) * MainMenu.cMovementCost;
+                            cost -= goldMapMatris[i, j];
+                            gainMatris[i, j] = cost + 1;
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (cost > gainMatris[i, j] && gainMatris[i, j] != 0)
+                        {
+                            cost = gainMatris[i, j];
+                        }
+                    }
+                }
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        if (cost == gainMatris[i, j])
+                        {
+                            targetC[0] = j;
+                            targetC[1] = i;
+                        }
+                    }
+                }
+                cost = 0;
+                for (int i = 0; i < mapHeight; i++)
+                {
+                    for (int j = 0; j < mapWidth; j++)
+                    {
+                        Debug.Write(" " + gainMatris[i, j]);
+                    }
+                    Debug.WriteLine("");
+                }
+                Debug.WriteLine("Hedef Belirlendi X:" + targetC[0] + " Y:" + targetC[1]);
             }
         }
         private void PlayD()
