@@ -1104,15 +1104,15 @@ namespace Yazlab1_1
                     }
                 }
                 cost = 100000;
-                if ((Math.Abs(targetA[1] - positionD[1]) + Math.Abs(targetA[0] - positionD[0])) >= (Math.Abs(targetA[1] - positionA[1]) + Math.Abs(targetA[0] - positionA[0])))
+                if ((Math.Abs(targetA[1] - positionD[1]) + Math.Abs(targetA[0] - positionD[0]) - MainMenu.maxMovement) >= (Math.Abs(targetA[1] - positionA[1]) + Math.Abs(targetA[0] - positionA[0])))
                 {
                     gainMatris[targetA[1], targetA[0]] = 0;
                 }
-                if ((Math.Abs(targetB[1] - positionD[1]) + Math.Abs(targetB[0] - positionD[0]))>= (Math.Abs(targetB[1] - positionB[1]) + Math.Abs(targetB[0] - positionB[0])))
+                if ((Math.Abs(targetB[1] - positionD[1]) + Math.Abs(targetB[0] - positionD[0]) - MainMenu.maxMovement) >= (Math.Abs(targetB[1] - positionB[1]) + Math.Abs(targetB[0] - positionB[0])))
                 {
                     gainMatris[targetB[1],targetB[0]]= 0;
                 }
-                if ((Math.Abs(targetC[1] - positionD[1]) + Math.Abs(targetC[0] - positionD[0])) >= (Math.Abs(targetC[1] - positionC[1]) + Math.Abs(targetC[0] - positionC[0])))
+                if ((Math.Abs(targetC[1] - positionD[1]) + Math.Abs(targetC[0] - positionD[0]) - MainMenu.maxMovement) >= (Math.Abs(targetC[1] - positionC[1]) + Math.Abs(targetC[0] - positionC[0])))
                 {
                     gainMatris[targetC[1], targetC[0]] = 0;
                 }
